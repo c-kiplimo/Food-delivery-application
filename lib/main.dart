@@ -6,24 +6,26 @@ import './const/themeColor.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import './loginpage/signup_page.dart';
 import './bloc/listTileColorBloc.dart';
+import 'Restaurant/resthome.dart';
+import 'Restaurant/rlogin.dart';
+import 'Restaurant/rsignup.dart';
 import 'firstpage.dart';
 
-
 void main() {
-  debugDefaultTargetPlatformOverride =TargetPlatform.fuchsia;
-   runApp(MyApp());
+  debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-    blocs: [
+      blocs: [
         //add yours BLoCs controlles
         Bloc((i) => ColorBloc()),
       ],
       child: MaterialApp(
-        title: "Food Tukk",
+        title: "Food Rider",
         home: FirstPage(),
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
@@ -32,12 +34,14 @@ class MyApp extends StatelessWidget {
           '/homepage': (BuildContext context) => new Home(),
           '/signin': (BuildContext context) => new SignInPage(),
           '/firstpage': (BuildContext context) => new FirstPage(),
+          '/resthome': (BuildContext context) => new RestaurantHome(),
+          '/rlogin': (BuildContext context) => new RestaurantLogin(),
+          '/rsignup': (BuildContext context) => new RestaurantSignup(),
         },
       ),
     );
   }
 }
-
 
 class Home extends StatefulWidget {
   @override
@@ -48,7 +52,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       drawer: Drawer(
         child: Column(
           children: <Widget>[
@@ -98,7 +102,7 @@ resizeToAvoidBottomInset: false,
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-               // To be implemented
+                // To be implemented
               },
             ),
           ],
@@ -110,14 +114,13 @@ resizeToAvoidBottomInset: false,
           children: <Widget>[
             FirstHalf(),
             SizedBox(height: 45),
-           // impelement
+            // impelement
           ],
         ),
       )),
     );
   }
 }
-
 
 class FirstHalf extends StatelessWidget {
   const FirstHalf({
@@ -129,14 +132,11 @@ class FirstHalf extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(35, 25, 0, 0),
       child: Column(
-        children: <Widget>[
-          
-        ],
+        children: <Widget>[],
       ),
     );
   }
 }
-
 
 class Items extends StatelessWidget {
   Items({
@@ -366,5 +366,3 @@ Widget title() {
     ],
   );
 }
-
-  

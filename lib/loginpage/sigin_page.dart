@@ -63,6 +63,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     onPressed: () {
                       //Implement logic
+                 Navigator.of(context).pushNamed('/homepage');
                     }),
               ),
             ),
@@ -138,6 +139,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 onTap: () {
                   // implement logic
+                   Navigator.of(context).pushReplacementNamed('/homepage');
                 }),
             Divider(
               height: 20.0,

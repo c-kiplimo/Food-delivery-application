@@ -104,7 +104,7 @@ class _RestaurantLoginState extends State<RestaurantLogin> {
                   ),
                 ),
                 onTap: () {
-                 
+                 Navigator.of(context).pushReplacementNamed('/resthome');
                 }),
             Divider(
               height: 20.0,
