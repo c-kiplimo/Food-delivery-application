@@ -63,7 +63,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     onPressed: () {
                       //Implement logic
-                 Navigator.of(context).pushNamed('/homepage');
+                 Navigator.of(context).pushNamed('/landingpage');
                     }),
               ),
             ),
