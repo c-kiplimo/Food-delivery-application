@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/bloc/listTileColorBloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import './loginpage/sigin_page.dart';
 import './const/themeColor.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
@@ -9,10 +12,15 @@ import './bloc/listTileColorBloc.dart';
 import 'Restaurant/resthome.dart';
 import 'Restaurant/rlogin.dart';
 import 'Restaurant/rsignup.dart';
+import 'bloc/cartListBloc.dart';
+import 'cart.dart';
 import 'firstpage.dart';
+import 'model/fooditem.dart';
 
-void main() {
+Future<void> main() async {
   debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -22,6 +30,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       blocs: [
         //add yours BLoCs controlles
+        Bloc((i) => CartListBloc()),
         Bloc((i) => ColorBloc()),
       ],
       child: MaterialApp(
@@ -49,6 +58,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +112,14 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontSize: 18),
               ),
               onTap: () {
-                // To be implemented
+                _googleSignIn.signOut();
+                print('User Signed Out');
+                Navigator.of(context).pop();
+                FirebaseAuth.instance.signOut().then((value) {
+                  Navigator.of(context).pushReplacementNamed('/firstpage');
+                }).catchError((e) {
+                  print(e);
+                });
               },
             ),
           ],
@@ -114,10 +131,53 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             FirstHalf(),
             SizedBox(height: 45),
-            // impelement
+            for (var foodItem in fooditemList.foodItems)
+              Builder(
+                builder: (context) {
+                  return ItemContainer(foodItem: foodItem);
+                },
+              )
           ],
         ),
       )),
+    );
+  }
+}
+
+class ItemContainer extends StatelessWidget {
+  ItemContainer({
+    @required this.foodItem,
+  });
+
+  final FoodItem foodItem;
+  final CartListBloc bloc = BlocProvider.getBloc<CartListBloc>();
+
+  addToCart(FoodItem foodItem) {
+    bloc.addToList(foodItem);
+  }
+
+  removeFromList(FoodItem foodItem) {
+    bloc.removeFromList(foodItem);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        addToCart(foodItem);
+        final snackBar = SnackBar(
+          content: Text('₹${foodItem.title} added to Cart'),
+          duration: Duration(milliseconds: 550),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+      child: Items(
+        hotel: foodItem.hotel,
+        itemName: foodItem.title,
+        itemPrice: foodItem.price,
+        imgUrl: foodItem.imgUrl,
+        leftAligned: (foodItem.id % 2) == 0 ? true : false,
+      ),
     );
   }
 }
@@ -132,11 +192,67 @@ class FirstHalf extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(35, 25, 0, 0),
       child: Column(
-        children: <Widget>[],
+        children: <Widget>[
+           CustomAppBar(),
+          //you could also use the spacer widget to give uneven distances, i just decided to go with a sizebox
+          SizedBox(height: 30),
+          title(),
+          SizedBox(height: 30),
+          searchBar(),
+          SizedBox(height: 45),
+          categories(),
+        ],
       ),
     );
   }
 }
+Widget categories() {
+  return Container(
+    height: 185,
+    child: ListView(
+      scrollDirection: Axis.horizontal,
+      children: <Widget>[
+        CategoryListItem(
+          categoryIcon: Icons.fastfood,
+          categoryName: "Burgers",
+          availability: 2,
+          selected: true,
+        ),
+        CategoryListItem(
+          categoryIcon: Icons.fastfood,
+          categoryName: "Pizza",
+          availability: 1,
+          selected: true,
+        ),
+        CategoryListItem(
+          categoryIcon: Icons.fastfood,
+          categoryName: "Samosa",
+          availability: 1,
+          selected: false,
+        ),
+        CategoryListItem(
+          categoryIcon: Icons.fastfood,
+          categoryName: "Idli Sambhar",
+          availability: 1,
+          selected: true,
+        ),
+        CategoryListItem(
+          categoryIcon: Icons.fastfood,
+          categoryName: "Masala Dosa",
+          availability: 1,
+          selected: true,
+        ),
+        CategoryListItem(
+          categoryIcon: Icons.fastfood,
+          categoryName: "Rolls",
+          availability: 1,
+          selected: true,
+        ),
+      ],
+    ),
+  );
+}
+
 
 class Items extends StatelessWidget {
   Items({
@@ -365,4 +481,48 @@ Widget title() {
       )
     ],
   );
+}
+class CustomAppBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final CartListBloc bloc = BlocProvider.getBloc<CartListBloc>();
+    return Container(
+      margin: EdgeInsets.only(bottom: 25),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Icon(Icons.menu),
+          StreamBuilder(
+            stream: bloc.listStream,
+            builder: (context, snapshot) {
+              List<FoodItem> foodItems = snapshot.data;
+              int length = foodItems != null ? foodItems.length : 0;
+              return buildGestureDetector(length, context, foodItems);
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  GestureDetector buildGestureDetector(
+      int length, BuildContext context, List<FoodItem> foodItems) {
+    return GestureDetector(
+      onTap: () {
+        if (length > 0) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Cart()));
+        } else {
+          return;
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 30),
+        child: Text(length.toString()),
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+            color: Colors.yellow[800], borderRadius: BorderRadius.circular(50)),
+      ),
+    );
+  }
 }

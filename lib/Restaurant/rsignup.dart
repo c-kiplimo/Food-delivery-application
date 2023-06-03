@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/const/themeColor.dart';
+import '../services/restmanagement.dart';
 import './rlogin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -112,7 +113,17 @@ class _RestaurantSignupState extends State<RestaurantSignup> {
                     ),
                   ),
                 ),
-                onTap: () {}),
+                onTap: () {
+                   FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passwordController.text)
+                      .then((signedInUser) {
+                    RestaurantManagement().storeNewRestaurant(signedInUser, context);
+                  }).catchError((e) {
+                    print(e);
+                  });
+                }),
             Divider(
               height: 20.0,
             ),

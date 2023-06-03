@@ -103,9 +103,19 @@ class _RestaurantLoginState extends State<RestaurantLogin> {
                     ),
                   ),
                 ),
-                onTap: () {
-                 Navigator.of(context).pushReplacementNamed('/resthome');
-                }),
+                onTap: () async {
+                 try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    // Sign-in successful, navigate to homepage
+    Navigator.of(context).pushReplacementNamed('/resthome');
+  } catch (e) {
+    print(e);
+    // Handle sign-in error
+  } }),
             Divider(
               height: 20.0,
             ),

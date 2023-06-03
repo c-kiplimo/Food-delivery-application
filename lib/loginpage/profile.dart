@@ -1,14 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/const/themeColor.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../loginpage/sigin_page.dart';
 
 class ProfilePage extends StatefulWidget {
-
+  final UserDetails detailsUser;
+  ProfilePage({Key key, this.detailsUser}) : super(key: key);
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +32,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 150.0,
                   decoration: BoxDecoration(
                     color: Themes.color,
-                    // image: DecorationImage(
-                    //   image: NetworkImage('${this.widget.detailsUser.photoUrl}'),
-                    //   fit: BoxFit.cover,
-                    // ),
+                    image: DecorationImage(
+                      image:
+                          NetworkImage('${this.widget.detailsUser.photoUrl}'),
+                      fit: BoxFit.cover,
+                    ),
                     borderRadius: BorderRadius.all(Radius.circular(75.0)),
                     boxShadow: [
                       BoxShadow(
@@ -44,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 15.0),
                 Text(
-                  'Hello, world!',
+                  '${this.widget.detailsUser.userName}',
                   style: TextStyle(
                     fontSize: 30.0,
                     fontWeight: FontWeight.w800,
@@ -52,7 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 10.0),
                 Text(
-                  'Hello, world!',
+                  '${this.widget.detailsUser.userEmail}',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontStyle: FontStyle.italic,
@@ -68,13 +73,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     shadowColor: Themes.color,
                     color: Themes.color,
                     elevation: 7.0,
-                    child: Center(
-                      child: Text(
-                        'Continue',
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacementNamed('/homepage');
+                      },
+                      child: Center(
+                        child: Text(
+                          'Continue',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
                     ),
@@ -89,6 +100,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     shadowColor: Themes.color,
                     color: Themes.color,
                     elevation: 7.0,
+                    child: GestureDetector(
+                      onTap: (){
+                        _googleSignIn.signOut();
+                        print('User Signed Out');
+                        Navigator.of(context).pop();
+                        FirebaseAuth.instance.signOut().then((value) {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/landingpage');
+                        }).catchError((e) {
+                          print(e);
+                        });
+                      },
                     child: Center(
                       child: Text(
                         'Log Out',
@@ -98,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontSize: 20,
                         ),
                       ),
-                    ),
+                    ),),
                   ),
                 ),
               ],

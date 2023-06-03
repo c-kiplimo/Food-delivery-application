@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/const/themeColor.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import './profile.dart';
 
 class SignInPage extends StatefulWidget {
@@ -63,7 +65,39 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     onPressed: () {
                       //Implement logic
-                 Navigator.of(context).pushNamed('/landingpage');
+                      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+                      final GoogleSignIn _googleSignIn = new GoogleSignIn();
+                      Future<User> _signIn(BuildContext) async {
+                        final GoogleSignInAccount googleUser =
+                            await _googleSignIn.signIn();
+                        final GoogleSignInAuthentication googleAuth =
+                            await googleUser.authentication;
+                        final AuthCredential credential =
+                            GoogleAuthProvider.credential(
+                                idToken: googleAuth.idToken,
+                                accessToken: googleAuth.accessToken);
+                        UserCredential userCredential = await _firebaseAuth
+                            .signInWithCredential(credential);
+                        User userDetails = userCredential.user;
+
+                        ProviderDetails providerInfo =
+                            new ProviderDetails(userDetails.tenantId);
+                        List<ProviderDetails> providerData =
+                            new List<ProviderDetails>();
+                        providerData.add(providerInfo);
+                        UserDetails details = new UserDetails(
+                            userDetails.tenantId,
+                            userDetails.displayName,
+                            userDetails.email,
+                            userDetails.photoURL,
+                            providerData);
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    new ProfilePage(detailsUser: details)));
+                      }
                     }),
               ),
             ),
@@ -137,10 +171,22 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                 ),
-                onTap: () {
-                  // implement logic
-                   Navigator.of(context).pushReplacementNamed('/homepage');
-                }),
+ onTap: () async {
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    // Sign-in successful, navigate to homepage
+    Navigator.of(context).pushReplacementNamed('/homepage');
+  } catch (e) {
+    print(e);
+    // Handle sign-in error
+  }
+},
+
+),
             Divider(
               height: 20.0,
             ),
@@ -171,4 +217,19 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
+}
+
+class UserDetails {
+  final String providerDetails;
+  final String userName;
+  final String userEmail;
+  final String photoUrl;
+  final List<ProviderDetails> providerData;
+  UserDetails(this.providerDetails, this.userName, this.userEmail,
+      this.photoUrl, this.providerData);
+}
+
+class ProviderDetails {
+  ProviderDetails(this.providerDetails);
+  final String providerDetails;
 }

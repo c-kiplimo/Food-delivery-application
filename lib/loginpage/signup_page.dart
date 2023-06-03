@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/const/themeColor.dart';
+import 'package:food_delivery/services/usermanagement.dart';
 import './sigin_page.dart';
 
-
+final FirebaseAuth mAuth = FirebaseAuth.instance;
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -112,7 +114,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 onTap: () {
-                 // implement logic
+                  // implement logic
+                  FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passwordController.text)
+                      .then((signedInUser) => {
+                            UserManagement().storeNewUser(signedInUser, context)
+                          })
+                      .catchError((e) {
+                    print(e);
+                  });
                 }),
             Divider(
               height: 20.0,
