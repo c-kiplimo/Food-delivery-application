@@ -14,8 +14,11 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  TextEditingController confirmPasswordController = new TextEditingController();
 
   bool _toggleVisibility = true;
+
+  bool _toggleConfirmVisibility = true;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +89,31 @@ class _SignUpPageState extends State<SignUpPage> {
                     SizedBox(
                       height: 20.0,
                     ),
+                    TextField(
+                      controller: confirmPasswordController,
+                      decoration: InputDecoration(
+                        hintText: "Confirm Password",
+                        hintStyle: TextStyle(
+                          color: Color(0xFFBDC2CB),
+                          fontSize: 18.0,
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _toggleConfirmVisibility =
+                                  !_toggleConfirmVisibility;
+                            });
+                          },
+                          icon: _toggleConfirmVisibility
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.visibility),
+                        ),
+                      ),
+                      obscureText: _toggleConfirmVisibility,
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
                   ],
                 ),
               ),
@@ -114,17 +142,41 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 onTap: () {
-                  // implement logic
-                  FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                          email: emailController.text,
-                          password: passwordController.text)
-                      .then((signedInUser) => {
-                            UserManagement().storeNewUser(signedInUser, context)
-                          })
-                      .catchError((e) {
-                    print(e);
-                  });
+                  // Check if passwords match
+                  if (passwordController.text ==
+                      confirmPasswordController.text) {
+                    // Passwords match, proceed with sign-up
+                    FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    )
+                        .then((signedInUser) {
+                      UserManagement().storeNewUser(signedInUser, context);
+                    }).catchError((e) {
+                      print(e);
+                    });
+                  } else {
+                    // Passwords do not match
+      // Display an error message or handle accordingly
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Password Mismatch'),
+            content: Text('Please make sure the passwords match.'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+                  }
                 }),
             Divider(
               height: 20.0,
