@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import './loginpage/sigin_page.dart';
@@ -16,8 +17,10 @@ import 'Restaurant/rlogin.dart';
 import 'Restaurant/rsignup.dart';
 import 'firstpage.dart';
 
-void main() {
+Future<void> main() async {
   debugDefaultTargetPlatformOverride =TargetPlatform.fuchsia;
+   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
    runApp(MyApp());
 }
 
