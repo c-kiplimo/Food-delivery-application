@@ -129,7 +129,7 @@ class CreditCardPage extends StatelessWidget {
   ? ccMask.updateText(snapshot.data!)
   : null;
 
-                  return Text(
+          return Text(
   snapshot.data ?? "**** **** **** ****",
   style: TextStyle(
     color: Colors.black,
