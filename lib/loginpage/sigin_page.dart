@@ -40,37 +40,37 @@ class _SignInPageState extends State<SignInPage> {
                 shape: BoxShape.rectangle,
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Themes.color,
-                  borderRadius: BorderRadius.circular(30.0)),
-              width: 225.0,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: MaterialButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Icon(
-                          FontAwesomeIcons.google,
-                          color: Colors.black54,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text(
-                          'Sign in With Google',
-                          style: TextStyle(color: Colors.black, fontSize: 17.0),
-                        ),
-                      ],
-                    ),
-                    onPressed: () {
-                      //Implement logic
-                      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-                      final GoogleSignIn _googleSignIn = new GoogleSignIn();
-                    }),
-              ),
-            ),
+            // Container(
+            //   decoration: BoxDecoration(
+            //       color: Themes.color,
+            //       borderRadius: BorderRadius.circular(30.0)),
+            //   width: 225.0,
+            //   child: Align(
+            //     alignment: Alignment.centerRight,
+            //     child: MaterialButton(
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.start,
+            //           children: <Widget>[
+            //             Icon(
+            //               FontAwesomeIcons.google,
+            //               color: Colors.black54,
+            //             ),
+            //             SizedBox(
+            //               width: 10.0,
+            //             ),
+            //             Text(
+            //               'Sign in With Google',
+            //               style: TextStyle(color: Colors.black, fontSize: 17.0),
+            //             ),
+            //           ],
+            //         ),
+            //         onPressed: () {
+            //           //Implement logic
+            //           final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+            //           final GoogleSignIn _googleSignIn = new GoogleSignIn();
+            //         }),
+            //   ),
+            // ),
             SizedBox(
               height: 10.0,
             ),

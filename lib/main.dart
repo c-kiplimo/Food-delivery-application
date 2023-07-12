@@ -508,6 +508,7 @@ class CustomAppBar extends StatelessWidget {
             },
           )
         ],
+        //_TypeError (Null check operator used on a null value)
       ),
     );
   }

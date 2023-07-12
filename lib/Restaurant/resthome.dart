@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/const/themeColor.dart';
-
 import '../services/crud.dart';
 
 class RestaurantHome extends StatefulWidget {
@@ -31,31 +30,35 @@ class _RestaurantHomeState extends State<RestaurantHome> {
               SizedBox(height: 70.0),
               Container(
                 color: Colors.white10,
-                width: 400,
+                width: MediaQuery.of(context).size.width,
+               
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
                       'AddDetails',
                       style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontFamily: 'Raleway',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 45),
+                        color: Colors.blueGrey,
+                        fontFamily: 'Raleway',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 45,
+                      ),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 60),
               Container(
-                width: 350,
+                width: MediaQuery.of(context).size.width,
                 child: TextField(
                   keyboardType: TextInputType.url,
                   style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
                   decoration: InputDecoration(
                     labelText: "Image Url",
-                    labelStyle:
-                        TextStyle(fontWeight: FontWeight.w200, fontSize: 20),
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      fontSize: 20,
+                    ),
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
@@ -65,15 +68,19 @@ class _RestaurantHomeState extends State<RestaurantHome> {
               ),
               SizedBox(height: 20),
               Container(
-                width: 350,
+                // this SizedBox fixes the RenderBox error
+              
+                width: MediaQuery.of(context).size.width,
                 child: TextField(
                   keyboardType: TextInputType.text,
                   maxLength: 25,
                   style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
                   decoration: InputDecoration(
                     labelText: "Restaurant Name",
-                    labelStyle:
-                        TextStyle(fontWeight: FontWeight.w200, fontSize: 20),
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      fontSize: 20,
+                    ),
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
@@ -81,16 +88,21 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                   },
                 ),
               ),
+              SizedBox(height: 20),
               Container(
-                width: 350,
+               
+                // this SizedBox fixes the RenderBox error
+                width: MediaQuery.of(context).size.width,
                 child: TextField(
                   keyboardType: TextInputType.text,
                   maxLength: 15,
                   style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
                   decoration: InputDecoration(
                     labelText: "Food Name",
-                    labelStyle:
-                        TextStyle(fontWeight: FontWeight.w200, fontSize: 20),
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      fontSize: 20,
+                    ),
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
@@ -98,119 +110,126 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                   },
                 ),
               ),
-              Container(
-                width: 350,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  maxLength: 5,
-                  style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
-                  decoration: InputDecoration(
-                    labelText: "Amount",
-                    labelStyle:
-                        TextStyle(fontWeight: FontWeight.w200, fontSize: 20),
-                    border: OutlineInputBorder(),
+              SizedBox(
+                height: 20),
+
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    maxLength: 5,
+                    style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
+                    decoration: InputDecoration(
+                      labelText: "Amount",
+                      labelStyle: TextStyle(
+                        fontWeight: FontWeight.w200,
+                        fontSize: 20,
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      this.amount = value;
+                    },
                   ),
-                  onChanged: (value) {
-                    this.amount = value;
-                  },
                 ),
-              ),
+              
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Material(
-  color: Themes.color,
-  child: InkWell(
-    onTap: () {
-      Map<String, dynamic> restaurantData = {
-        'restaurantName': this.restaurantName,
-        'foodName': this.foodName,
-        'amount': this.amount,
-        'imageUrl': this.imageUrl,
-      };
-      crudObj.addData(restaurantData).then((result) {
-        dialogTrigger(context);
-      }).catchError((e) {
-        print(e);
-      });
-    },
-    splashColor: Colors.yellow,
-    child: Ink(
-      width: double.infinity,
-      height: 48.0,
-      child: Center(
-        child: Text(
-          'Submit',
-          style: TextStyle(color: Colors.black, fontSize: 18.0),
-        ),
-      ),
-    ),
-  ),
-),
-
-           Material(
-  color: Colors.red.shade400,
-  child: InkWell(
-    onTap: () {
-      Navigator.of(context).pop();
-      FirebaseAuth.instance.signOut().then((value) {
-        Navigator.of(context).pushReplacementNamed('/firstpage');
-      }).catchError((e) {
-        print(e);
-      });
-    },
-    splashColor: Colors.yellow,
-    child: Ink(
-      width: double.infinity,
-      height: 48.0,
-      child: Center(
-        child: Text(
-          'LogOut',
-          style: TextStyle(color: Colors.black, fontSize: 18.0),
-        ),
-      ),
-    ),
-  ),
-)
-
-
+                  Expanded(
+                    child: Material(
+                      color: Themes.color,
+                      child: InkWell(
+                        onTap: () {
+                          Map<String, dynamic> restaurantData = {
+                            'restaurantName': this.restaurantName,
+                            'foodName': this.foodName,
+                            'amount': this.amount,
+                            'imageUrl': this.imageUrl,
+                          };
+                          crudObj.addData(restaurantData).then((result) {
+                            dialogTrigger(context);
+                          }).catchError((e) {
+                            print(e);
+                          });
+                        },
+                        splashColor: Colors.yellow,
+                        child: Ink(
+                   
+                          height: 48.0,
+                          child: Center(
+                            child: Text(
+                              'Submit',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 18.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                   Material(
+                   color: Colors.red.shade400,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        FirebaseAuth.instance.signOut().then((value) {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/firstpage');
+                        }).catchError((e) {
+                          print(e);
+                        });
+                      },
+                      splashColor: Colors.yellow,
+                      child: Ink(
+                        height: 48.0,
+                        child: Center(
+                          child: Text(
+                            'LogOut',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 18.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-Future<Future> dialogTrigger(BuildContext context) async {
-  return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Job done', style: TextStyle(fontSize: 22.0)),
-          content: Text(
-            'Added Successfully',
-            style: TextStyle(fontSize: 20.0),
-          ),
-          actions: <Widget>[
-            TextButton(
-  child: Text(
-    'Alright',
-    style: TextStyle(fontSize: 18),
-  ),
-  style: ButtonStyle(
-    foregroundColor: MaterialStateProperty.all(Themes.color),
-  ),
-  onPressed: () {
-    Navigator.of(context).pop();
-  },
-)
-
-          ],
-        );
-      });
+  Future<Future> dialogTrigger(BuildContext context) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Job done', style: TextStyle(fontSize: 22.0)),
+            content: Text(
+              'Added Successfully',
+              style: TextStyle(fontSize: 20.0),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                  'Alright',
+                  style: TextStyle(fontSize: 18),
+                ),
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(Themes.color),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
 }

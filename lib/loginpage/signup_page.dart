@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../const/themeColor.dart';
 import '../services/usermanagement.dart';
 import './sigin_page.dart';
 
 final FirebaseAuth mAuth = FirebaseAuth.instance;
-
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -22,7 +22,6 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _toggleVisibility = true;
 
   bool _toggleConfirmVisibility = true;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     TextField(
                       controller: passwordController,
                       decoration: InputDecoration(
-                        hintText: "Password more then 6",
+                        hintText: "Password more than 6",
                         hintStyle: TextStyle(
                           color: Color(0xFFBDC2CB),
                           fontSize: 18.0,
@@ -145,44 +144,53 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
-                onTap: ()  {
-                  // Check if passwords match
-                  if (passwordController.text ==
-                      confirmPasswordController.text) {
-                    // Passwords match, proceed with sign-up
-                    
-                    FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                      email: emailController.text,
-                      password: passwordController.text,
-                    )
-                        .then((signedInUser) {
-                      UserManagement().storeNewUser(signedInUser, context);
-                    }).catchError((e) {
-                      print(e);
-                    });
-                  } else {
-                    // Passwords do not match
-      // Display an error message or handle accordingly
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Password Mismatch'),
-            content: Text('Please make sure the passwords match.'),
-            actions: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
+                onTap: () {
+  // Check if passwords match
+  if (passwordController.text == confirmPasswordController.text) {
+    // Passwords match, proceed with sign-up
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        )
+        .then((signedInUser) {
+          // User created successfully
+          Fluttertoast.showToast(
+            msg: 'Sign-up successful',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
           );
-        },
-      );
-                  }
-                }),
+
+          // Redirect to sign-in page
+          Navigator.pushReplacementNamed(context, '/signin');
+        })
+        .catchError((e) {
+          // Handle sign-up error
+          print(e);
+        });
+  } else {
+    // Passwords do not match
+    // Display an error message or handle accordingly
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Password Mismatch'),
+          content: Text('Please make sure the passwords match.'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+),
             Divider(
               height: 20.0,
             ),
