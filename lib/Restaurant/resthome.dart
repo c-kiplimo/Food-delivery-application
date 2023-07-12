@@ -31,7 +31,6 @@ class _RestaurantHomeState extends State<RestaurantHome> {
               Container(
                 color: Colors.white10,
                 width: MediaQuery.of(context).size.width,
-               
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -41,89 +40,103 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                         color: Colors.blueGrey,
                         fontFamily: 'Raleway',
                         fontWeight: FontWeight.bold,
-                        fontSize: 45,
+                        fontSize: 30,
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 60),
+              SizedBox(height: 30),
               Container(
+                height: 50,
                 width: MediaQuery.of(context).size.width,
-                child: TextField(
-                  keyboardType: TextInputType.url,
-                  style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
-                  decoration: InputDecoration(
-                    labelText: "Image Url",
-                    labelStyle: TextStyle(
-                      fontWeight: FontWeight.w200,
-                      fontSize: 20,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: TextField(
+                    keyboardType: TextInputType.url,
+                    style:
+                        TextStyle(fontFamily: 'Raleway', color: Colors.black),
+                    decoration: InputDecoration(
+                      labelText: "Image Url",
+                      labelStyle: TextStyle(
+                        fontWeight: FontWeight.w200,
+                        fontSize: 15,
+                      ),
+                      border: OutlineInputBorder(),
                     ),
-                    border: OutlineInputBorder(),
+                    onChanged: (value) {
+                      this.imageUrl = value;
+                    },
                   ),
-                  onChanged: (value) {
-                    this.imageUrl = value;
-                  },
                 ),
               ),
               SizedBox(height: 20),
               Container(
                 // this SizedBox fixes the RenderBox error
-              
+                height: 70,
                 width: MediaQuery.of(context).size.width,
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  maxLength: 25,
-                  style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
-                  decoration: InputDecoration(
-                    labelText: "Restaurant Name",
-                    labelStyle: TextStyle(
-                      fontWeight: FontWeight.w200,
-                      fontSize: 20,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: TextField(
+                    keyboardType: TextInputType.text,
+                    maxLength: 25,
+                    style:
+                        TextStyle(fontFamily: 'Raleway', color: Colors.black),
+                    decoration: InputDecoration(
+                      labelText: "Restaurant Name",
+                      labelStyle: TextStyle(
+                        fontWeight: FontWeight.w200,
+                        fontSize: 15,
+                      ),
+                      border: OutlineInputBorder(),
                     ),
-                    border: OutlineInputBorder(),
+                    onChanged: (value) {
+                      this.restaurantName = value;
+                    },
                   ),
-                  onChanged: (value) {
-                    this.restaurantName = value;
-                  },
                 ),
               ),
               SizedBox(height: 20),
               Container(
-               
-                // this SizedBox fixes the RenderBox error
+                height: 70,
                 width: MediaQuery.of(context).size.width,
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  maxLength: 15,
-                  style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
-                  decoration: InputDecoration(
-                    labelText: "Food Name",
-                    labelStyle: TextStyle(
-                      fontWeight: FontWeight.w200,
-                      fontSize: 20,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: TextField(
+                    keyboardType: TextInputType.text,
+                    maxLength: 15,
+                    style:
+                        TextStyle(fontFamily: 'Raleway', color: Colors.black),
+                    decoration: InputDecoration(
+                      labelText: "Food Name",
+                      labelStyle: TextStyle(
+                        fontWeight: FontWeight.w200,
+                        fontSize: 15,
+                      ),
+                      border: OutlineInputBorder(),
                     ),
-                    border: OutlineInputBorder(),
+                    onChanged: (value) {
+                      this.foodName = value;
+                    },
                   ),
-                  onChanged: (value) {
-                    this.foodName = value;
-                  },
                 ),
               ),
-              SizedBox(
-                height: 20),
-
-                Container(
-                  width: MediaQuery.of(context).size.width,
+              SizedBox(height: 20),
+              Container(
+                height: 70,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   child: TextField(
                     keyboardType: TextInputType.number,
                     maxLength: 5,
-                    style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
+                    style:
+                        TextStyle(fontFamily: 'Raleway', color: Colors.black),
                     decoration: InputDecoration(
                       labelText: "Amount",
                       labelStyle: TextStyle(
                         fontWeight: FontWeight.w200,
-                        fontSize: 20,
+                        fontSize: 15,
                       ),
                       border: OutlineInputBorder(),
                     ),
@@ -132,71 +145,72 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                     },
                   ),
                 ),
-              
+              ),
               SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Expanded(
-                    child: Material(
-                      color: Themes.color,
-                      child: InkWell(
-                        onTap: () {
-                          Map<String, dynamic> restaurantData = {
-                            'restaurantName': this.restaurantName,
-                            'foodName': this.foodName,
-                            'amount': this.amount,
-                            'imageUrl': this.imageUrl,
-                          };
-                          crudObj.addData(restaurantData).then((result) {
-                            dialogTrigger(context);
-                          }).catchError((e) {
-                            print(e);
-                          });
-                        },
-                        splashColor: Colors.yellow,
-                        child: Ink(
-                   
-                          height: 48.0,
-                          child: Center(
-                            child: Text(
-                              'Submit',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18.0),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 60),
+                        child: Material(
+                          color: Themes.color,
+                          borderRadius: BorderRadius.circular(20.5),
+                          child: InkWell(
+                            onTap: () {
+                              Map<String, dynamic> restaurantData = {
+                                'restaurantName': this.restaurantName,
+                                'foodName': this.foodName,
+                                'amount': this.amount,
+                                'imageUrl': this.imageUrl,
+                              };
+                              crudObj.addData(restaurantData).then((result) {
+                                dialogTrigger(context);
+                              }).catchError((e) {
+                                print(e);
+                              });
+                            },
+                            child: Container(
+                              height: 45.0,
+                              child: Center(
+                                child: Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18.0),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20,),
-                   Material(
-                   color: Colors.red.shade400,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        FirebaseAuth.instance.signOut().then((value) {
-                          Navigator.of(context)
-                              .pushReplacementNamed('/firstpage');
-                        }).catchError((e) {
-                          print(e);
-                        });
-                      },
-                      splashColor: Colors.yellow,
-                      child: Ink(
-                        height: 48.0,
-                        child: Center(
-                          child: Text(
-                            'LogOut',
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 18.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                    // SizedBox(
+                    //   height: 30,
+                    // ),
+                  ],
+                ),
               ),
+              SizedBox(height: 200,),
+           Align(
+  alignment: Alignment.bottomCenter,
+  child: GestureDetector(
+    onTap: () {
+      Navigator.of(context).pop();
+      FirebaseAuth.instance.signOut().then((value) {
+        Navigator.of(context).pushReplacementNamed('/firstpage');
+      }).catchError((e) {
+        print(e);
+      });
+    },
+    child: Text(
+      'LogOut',
+      style: TextStyle(color: Color.fromARGB(255, 238, 6, 6), fontSize: 18.0),
+    ),
+  ),
+)
+
             ],
           ),
         ),
