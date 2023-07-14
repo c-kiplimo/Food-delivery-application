@@ -18,10 +18,10 @@ import 'Restaurant/rsignup.dart';
 import 'firstpage.dart';
 
 Future<void> main() async {
-  debugDefaultTargetPlatformOverride =TargetPlatform.fuchsia;
-   WidgetsFlutterBinding.ensureInitialized();
+  debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-   runApp(MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
         Bloc((i) => CartListBloc()),
         Bloc((i) => ColorBloc()),
       ],
-      
       dependencies: [],
       child: MaterialApp(
           title: "Food Tukk",
@@ -63,7 +62,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       drawer: Drawer(
         child: Column(
           children: <Widget>[
@@ -165,14 +164,13 @@ class ItemContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-  addToCart(foodItem);
-  final snackBar = SnackBar(
-    content: Text('₹${foodItem.title} added to Cart'),
-    duration: Duration(milliseconds: 550),
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-},
-
+        addToCart(foodItem);
+        final snackBar = SnackBar(
+          content: Text('${foodItem.title} added to Cart'),
+          duration: Duration(milliseconds: 550),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
       child: Items(
         hotel: foodItem.hotel,
         itemName: foodItem.title,
@@ -274,7 +272,7 @@ class Items extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double containerPadding = 45;
-    double containerBorderRadius = 10;
+    double containerBorderRadius = 1;
 
     return Column(
       children: <Widget>[
@@ -323,7 +321,7 @@ class Items extends StatelessWidget {
                                     fontSize: 18,
                                   )),
                             ),
-                            Text("\₹$itemPrice",
+                            Text("$itemPrice",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 18,
@@ -378,13 +376,8 @@ class CategoryListItem extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(40),
         color: selected ? Themes.color : Colors.white,
-        border: Border.all(
-            color: Theme.of(context).primaryColor,
-            width: 1.5),
-
-
-
-     boxShadow: [
+        border: Border.all(color: Theme.of(context).primaryColor, width: 1.5),
+        boxShadow: [
           BoxShadow(
             color: Colors.grey[100] as Color,
             blurRadius: 15,
@@ -392,7 +385,6 @@ class CategoryListItem extends StatelessWidget {
             spreadRadius: 5,
           )
         ],
-
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -403,8 +395,7 @@ class CategoryListItem extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(50),
                 border: Border.all(
-                    color: Theme.of(context).primaryColor,
-                    width: 1.5)),
+                    color: Theme.of(context).primaryColor, width: 1.5)),
             child: Icon(
               categoryIcon,
               color: Colors.black,
@@ -500,13 +491,21 @@ class CustomAppBar extends StatelessWidget {
         children: <Widget>[
           Icon(Icons.menu),
           StreamBuilder(
-            stream: bloc.listStream,
-            builder: (context, snapshot) {
-              List<FoodItem>? foodItems = snapshot.data;
-              int length = foodItems != null ? foodItems.length : 0;
-              return buildGestureDetector(length, context, foodItems!);
-            },
-          )
+              stream: bloc.listStream,
+              builder: (context, snapshot) {
+                List<FoodItem>? foodItems = snapshot.data;
+                int length = foodItems != null ? foodItems.length : 0;
+                if (foodItems != null) {
+                  return buildGestureDetector(length, context, foodItems);
+                } else {
+                  // Handle the case when foodItems is null
+                  return CircularProgressIndicator(); // Or any other widget or logic you want to use
+                }
+              }
+
+              //   return buildGestureDetector(length, context, foodItems!);
+              // },
+              )
         ],
         //_TypeError (Null check operator used on a null value)
       ),
