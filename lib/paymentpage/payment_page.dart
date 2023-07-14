@@ -38,7 +38,7 @@ class PaymentPage extends StatelessWidget {
                     style: TextStyle(
                         fontFamily: 'Raleway',
                         fontWeight: FontWeight.bold,
-                        fontSize: 38),
+                        fontSize: 30),
                   ),
                 ],
               ),

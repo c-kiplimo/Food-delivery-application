@@ -119,7 +119,7 @@ Container totalAmount(List<FoodItem> foodItems) {
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
         ),
         Text(
-          "\₹${returnTotalAmount(foodItems)}",
+          "${returnTotalAmount(foodItems)}",
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 28),
         ),
       ],
@@ -400,7 +400,7 @@ class ItemContent extends StatelessWidget {
                 ]),
           ),
           Text(
-            "\₹${foodItem.quantity * foodItem.price}",
+            "${foodItem.quantity * foodItem.price}",
             style:
                 TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
           ),
